@@ -48,7 +48,7 @@ class Player:
                     return True
         return False
     
-    def orbLeft(self):
+    def eat_orb(self):
         self.app.orbs.remove(self.grid_pos)
         self.orbLeft -= 1
             
@@ -62,4 +62,4 @@ class Player:
         self.grid_pos[0] = (self.pix_pos[0] - TOP_BOTTOM_BUFFER + self.app.cell_width // 2) // self.app.cell_width + 1
         self.grid_pos[1] = (self.pix_pos[1] - TOP_BOTTOM_BUFFER + self.app.cell_height // 2) // self.app.cell_weight + 1
         if self.on_orb():
-            self.eat
+            self.eat_orb()

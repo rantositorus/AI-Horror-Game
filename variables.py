@@ -1,13 +1,13 @@
 from pygame.math import Vector2 as vec
 
 # screen settings
-WIDTH, HEIGHT = 610, 670
+WIDTH, HEIGHT = 1000, 1000
 FPS = 60
 TOP_BOTTOM_BUFFER = 50
 MAZE_WIDTH, MAZE_HEIGHT = WIDTH-TOP_BOTTOM_BUFFER, HEIGHT-TOP_BOTTOM_BUFFER
 
-ROWS = 30
-COLS = 28
+ROWS = 25
+COLS = 25
 
 # colour settings
 BLACK = (0, 0, 0)

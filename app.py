@@ -168,10 +168,13 @@ class App:
         else:
             banner = "GAME OVER"
             warna = (255, 0, 0)
+        
+        y_position = HEIGHT // 3
+        
         quit_text = "Press the escape button to QUIT"
-        self.draw_text(banner, self.screen, [WIDTH//2, 100],  52, warna, "arial", centered=True)
+        self.draw_text(banner, self.screen, [WIDTH//2, y_position],  52, warna, "times new roman", centered=True)
         self.draw_text(quit_text, self.screen, [
-                       WIDTH//2, HEIGHT//1.5],  36, (190, 190, 190), "arial", centered=True)
+                       WIDTH//2, HEIGHT//2],  36, (190, 190, 190), "times new roman", centered=True)
         pygame.display.update()
         
     

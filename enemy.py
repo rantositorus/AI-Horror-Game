@@ -13,7 +13,7 @@ class Enemy:
         self.pix_pos = self.get_pix_pos()
         self.radius = int(self.app.cell_width//2.3)
         # self.number = number
-        self.colour = self.set_colour()
+        # self.colour = self.set_colour()
         self.direction = vec(0, 0)
         self.target = None
         self.speed = 1
@@ -32,7 +32,7 @@ class Enemy:
                             self.app.cell_height//2)//self.app.cell_height+1
 
     def draw(self):
-        pygame.draw.circle(self.app.screen, self.colour,
+        pygame.draw.circle(self.app.screen, RED,
                            (int(self.pix_pos.x), int(self.pix_pos.y)), self.radius)
 
     def set_target(self):

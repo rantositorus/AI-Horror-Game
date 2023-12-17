@@ -19,13 +19,12 @@ class App:
         self.cell_height = MAZE_HEIGHT//ROWS
         self.walls = []
         self.orbs = []
-        self.enemies = []
         self.enemy_pos = None
         self.player_pos = None
         self.goal_pos = None
-        # self.load()
-        # self.enemy = Enemy(self, vec(self.enemy_pos))
-        # self.player = Player(self, vec(self.player_pos))
+        self.load()
+        self.enemy = Enemy(self, vec(self.enemy_pos))
+        self.player = Player(self, vec(self.player_pos))
 
     def run(self):
         while self.runned:
@@ -38,7 +37,26 @@ class App:
                 self.playing_update()
                 self.playing_draw()
                 
-
+    def load(self):
+        self.background = pygame.image.load('map.png')
+        self.background = pygame.transform.scale(self.background, (MAZE_WIDTH, MAZE_HEIGHT))
+        with open("map.txt", 'r') as file:
+            for yidx, line in enumerate(file):
+                for xidx, char in enumerate(line):
+                    if char == "X":
+                        self.walls.append(vec(xidx, yidx))
+                    elif char == "O":
+                        self.orbs.append(vec(xidx, yidx))
+                    elif char == "P":
+                        self.player_pos = [xidx, yidx]
+                    elif char == "E":
+                        self.enemy_pos = [xidx, yidx]
+                    elif char == "G":
+                        self.goal_pos = [xidx, yidx]
+                    elif char == "1":
+                        pygame.draw.rect(self.background, BLACK, (xidx*self.cell_width, yidx*self.cell_height,
+                                                                  self.cell_width, self.cell_height))
+    
     def draw_text(self, words, screen, pos, size, colour, font_name, centered=False):
         font = pygame.font.SysFont(font_name, size)
         text = font.render(words, False, colour)
@@ -47,6 +65,21 @@ class App:
             pos[0] = pos[0]-text_size[0]//2
             pos[1] = pos[1]-text_size[1]//2
         screen.blit(text, pos)
+        
+    def draw_grid(self):
+        for x in range(WIDTH//self.cell_width):
+            pygame.draw.line(self.background, GREY, (x*self.cell_width, 0), (x*self.cell_width, HEIGHT))
+        for x in range(HEIGHT//self.cell_height):
+            pygame.draw.line(self.background, GREY, (0, x*self.cell_height), (WIDTH, x*self.cell_height))
+        for orb in self.orbs:
+            pygame.draw.rect(self.background, (170, 132, 58), (orb.x*self.cell_width, orb.y*self.cell_height,
+                                                                  self.cell_width, self.cell_height))
+            
+    def draw_orbs(self):
+        for orb in self.orbs:
+            pygame.draw.circle(self.screen, (124, 123, 7),
+                               (int(orb.x*self.cell_width)+self.cell_width//2+TOP_BOTTOM_BUFFER//2,
+                                int(orb.y*self.cell_height)+self.cell_height//2+TOP_BOTTOM_BUFFER//2), 5)
     
 ############################# START EVENTS ##################################
 
@@ -92,4 +125,15 @@ class App:
         self.enemy.update()
         if self.enemy.grid_pos == self.player.grid_pos:
                 self.state = 'game over'
+                
+    def playing_draw(self):
+        self.screen.fill(BLACK)
+        self.screen.blit(self.background, (TOP_BOTTOM_BUFFER//2, TOP_BOTTOM_BUFFER//2))
+        self.draw_orbs()
+        self.draw_grid()
+        self.draw_text('ORBS LEFT: {}'.format(self.player.orbLeft),
+                       self.screen, [60, 0], 18, WHITE, START_FONT)
+        self.player.draw()
+        self.enemy.draw()
+        pygame.display.update()
     

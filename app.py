@@ -25,7 +25,6 @@ class App:
         # self.load()
         # self.enemy = Enemy(self, vec(self.enemy_pos))
         # self.player = Player(self, vec(self.player_pos))
-        # self.make_enemies()
 
     def run(self):
         while self.runned:
@@ -89,9 +88,7 @@ class App:
     
     def playing_update(self):
         self.player.update()
-        for enemy in self.enemies:
-            enemy.update()
-        for enemy in self.enemies:
-            if enemy.grid_pos == self.player.grid_pos:
+        self.enemy.update()
+        if self.enemy.grid_pos == self.player.grid_pos:
                 self.state = 'game over'
     

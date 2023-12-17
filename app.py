@@ -23,6 +23,7 @@ class App:
         self.enemy_pos = []
         self.player_pos = None
         # self.load()
+        # self.enemy = Enemy(self, vec(self.enemy_pos))
         # self.player = Player(self, vec(self.player_pos))
         # self.make_enemies()
 
@@ -66,3 +67,31 @@ class App:
         self.draw_text('COLLECT THE ORBS TO WIN', self.screen, [WIDTH//2, HEIGHT//2], START_TEXT_SIZE, (44, 167, 198), START_FONT, centered=True)
         self.draw_text('PUSH ANY KEY TO START', self.screen, [WIDTH//2, HEIGHT//2+75], START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
         pygame.display.update()
+
+        
+############################# PLAYING EVENTS ##################################
+
+    def playing_event(self):
+        if len(self.orbs) == 0:
+            self.state = 'game over'
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.runned = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.player.move(vec(0, -1))
+                if event.key == pygame.K_DOWN:
+                    self.player.move(vec(0, 1))
+                if event.key == pygame.K_LEFT:
+                    self.player.move(vec(-1, 0))
+                if event.key == pygame.K_RIGHT:
+                    self.player.move(vec(1, 0))
+    
+    def playing_update(self):
+        self.player.update()
+        for enemy in self.enemies:
+            enemy.update()
+        for enemy in self.enemies:
+            if enemy.grid_pos == self.player.grid_pos:
+                self.state = 'game over'
+    

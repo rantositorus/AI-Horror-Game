@@ -6,13 +6,13 @@ vec = pygame.math.Vector2
 
 
 class Enemy:
-    def __init__(self, app, pos, number):
+    def __init__(self, app, pos):
         self.app = app
         self.grid_pos = pos
         self.starting_pos = [pos.x, pos.y]
         self.pix_pos = self.get_pix_pos()
         self.radius = int(self.app.cell_width//2.3)
-        self.number = number
+        # self.number = number
         self.colour = self.set_colour()
         self.direction = vec(0, 0)
         self.target = None
@@ -93,33 +93,33 @@ class Enemy:
                     shortest.insert(0, step["Current"])
         return shortest
 
-    def get_random_direction(self):
-        while True:
-            number = random.randint(-2, 1)
-            if number == -2:
-                x_dir, y_dir = 1, 0
-            elif number == -1:
-                x_dir, y_dir = 0, 1
-            elif number == 0:
-                x_dir, y_dir = -1, 0
-            else:
-                x_dir, y_dir = 0, -1
-            next_pos = vec(self.grid_pos.x + x_dir, self.grid_pos.y + y_dir)
-            if next_pos not in self.app.walls:
-                break
-        return vec(x_dir, y_dir)
+    # def get_random_direction(self):
+    #     while True:
+    #         number = random.randint(-2, 1)
+    #         if number == -2:
+    #             x_dir, y_dir = 1, 0
+    #         elif number == -1:
+    #             x_dir, y_dir = 0, 1
+    #         elif number == 0:
+    #             x_dir, y_dir = -1, 0
+    #         else:
+    #             x_dir, y_dir = 0, -1
+    #         next_pos = vec(self.grid_pos.x + x_dir, self.grid_pos.y + y_dir)
+    #         if next_pos not in self.app.walls:
+    #             break
+    #     return vec(x_dir, y_dir)
 
     def get_pix_pos(self):
         return vec((self.grid_pos.x*self.app.cell_width)+TOP_BOTTOM_BUFFER//2+self.app.cell_width//2,
                    (self.grid_pos.y*self.app.cell_height)+TOP_BOTTOM_BUFFER//2 +
                    self.app.cell_height//2)
 
-    def set_colour(self):
-        if self.number == 0:
-            return (43, 78, 203)
-        if self.number == 1:
-            return (197, 200, 27)
-        if self.number == 2:
-            return (189, 29, 29)
-        if self.number == 3:
-            return (215, 159, 33)
+    # def set_colour(self):
+    #     if self.number == 0:
+    #         return (43, 78, 203)
+    #     if self.number == 1:
+    #         return (197, 200, 27)
+    #     if self.number == 2:
+    #         return (189, 29, 29)
+    #     if self.number == 3:
+    #         return (215, 159, 33)

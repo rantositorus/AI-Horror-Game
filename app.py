@@ -12,7 +12,7 @@ class App:
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
-        self.run = True
+        self.runned = True
         self.state = "start"
         self.cell_width = MAZE_WIDTH//COLS
         self.cell_height = MAZE_HEIGHT//ROWS
@@ -21,12 +21,12 @@ class App:
         self.enemies = []
         self.enemy_pos = []
         self.player_pos = None
-        self.load()
-        self.player = Player(self, vec(self.player_pos))
-        self.make_enemies()
+        # self.load()
+        # self.player = Player(self, vec(self.player_pos))
+        # self.make_enemies()
 
     def run(self):
-        while self.run:
+        while self.runned:
             if self.state == 'start':
                 self.start_event()
                 self.start_update()
@@ -37,6 +37,15 @@ class App:
                 self.playing_draw()
                 
 
+    def draw_text(self, words, screen, pos, size, colour, font_name, centered=False):
+        font = pygame.font.SysFont(font_name, size)
+        text = font.render(words, False, colour)
+        text_size = text.get_size()
+        if centered:
+            pos[0] = pos[0]-text_size[0]//2
+            pos[1] = pos[1]-text_size[1]//2
+        screen.blit(text, pos)
+    
 ############################# START EVENTS ##################################
 
     def start_event(self):
@@ -51,6 +60,5 @@ class App:
     
     def start_draw(self):
         self.screen.fill(BLACK)
-        start_text = START_FONT.render("Press any key to start", True, (255, 255, 255))
-        self.screen.blit(start_text, (WIDTH//2 - start_text.get_width()//2, HEIGHT//2 - start_text.get_height()//2))
+        self.draw_text('PUSH ANY KEY TO START', self.screen, [WIDTH//2, HEIGHT//2], START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
         pygame.display.update()

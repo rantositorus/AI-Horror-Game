@@ -52,7 +52,7 @@ class App:
     def start_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.run = False
+                self.runnned = False
             if event.type == pygame.KEYDOWN:
                 self.state = 'playing'
     

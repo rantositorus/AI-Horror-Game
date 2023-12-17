@@ -6,6 +6,7 @@ from player import *
 from enemy import *
 
 pygame.init()
+pygame.display.set_caption('AI Horror Game')
 vec = pygame.math.Vector2
 
 class App:

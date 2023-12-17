@@ -25,6 +25,7 @@ class App:
         self.load()
         self.enemy = Enemy(self, vec(self.enemy_pos))
         self.player = Player(self, vec(self.player_pos))
+        # self.goal_grid_pos = vec(self.goal_pos)
 
     def run(self):
         while self.runned:
@@ -36,6 +37,13 @@ class App:
                 self.playing_event()
                 self.playing_update()
                 self.playing_draw()
+            elif self.state == 'game over':
+                self.game_over_event()
+                self.game_over_update()
+                self.game_over_draw()
+            else:
+                self.running = False
+            self.clock.tick(FPS)
                 
     def load(self):
         self.background = pygame.image.load('map.png')
@@ -71,9 +79,6 @@ class App:
             pygame.draw.line(self.background, GREY, (x*self.cell_width, 0), (x*self.cell_width, HEIGHT))
         for x in range(HEIGHT//self.cell_height):
             pygame.draw.line(self.background, GREY, (0, x*self.cell_height), (WIDTH, x*self.cell_height))
-        for orb in self.orbs:
-            pygame.draw.rect(self.background, (170, 132, 58), (orb.x*self.cell_width, orb.y*self.cell_height,
-                                                                  self.cell_width, self.cell_height))
             
     def draw_orbs(self):
         for orb in self.orbs:
@@ -105,35 +110,68 @@ class App:
 ############################# PLAYING EVENTS ##################################
 
     def playing_event(self):
-        if len(self.orbs) == 0:
+        if len(self.orbs) == 0 and (self.player.grid_pos[0] == self.goal_pos[0] and self.player.grid_pos[1] == self.goal_pos[1]):
             self.state = 'game over'
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.runned = False
+                self.running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    self.player.move(vec(0, -1))
-                if event.key == pygame.K_DOWN:
-                    self.player.move(vec(0, 1))
                 if event.key == pygame.K_LEFT:
                     self.player.move(vec(-1, 0))
                 if event.key == pygame.K_RIGHT:
                     self.player.move(vec(1, 0))
+                if event.key == pygame.K_UP:
+                    self.player.move(vec(0, -1))
+                if event.key == pygame.K_DOWN:
+                    self.player.move(vec(0, 1))
     
     def playing_update(self):
         self.player.update()
         self.enemy.update()
         if self.enemy.grid_pos == self.player.grid_pos:
-                self.state = 'game over'
+            self.state = 'game over'
                 
     def playing_draw(self):
         self.screen.fill(BLACK)
         self.screen.blit(self.background, (TOP_BOTTOM_BUFFER//2, TOP_BOTTOM_BUFFER//2))
         self.draw_orbs()
+        pygame.draw.rect(self.screen, (0, 255, 0), (self.goal_pos[1] * self.cell_width+39 + TOP_BOTTOM_BUFFER//2,
+                                                self.goal_pos[0] * self.cell_height-39 + TOP_BOTTOM_BUFFER//2,
+                                                self.cell_width, self.cell_height))
         self.draw_grid()
         self.draw_text('ORBS LEFT: {}'.format(self.player.orbLeft),
-                       self.screen, [60, 0], 18, WHITE, START_FONT)
+                       self.screen, [60, 15], 18, WHITE, START_FONT)
+        
         self.player.draw()
         self.enemy.draw()
         pygame.display.update()
+        
+        
+        
+############################# GAME OVER EVENTS ##################################
+
+    def game_over_event(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                sys.exit()
+                
+    def game_over_update(self):
+        pass
+    
+    def game_over_draw(self):
+        self.screen.fill(BLACK)
+        if(len(self.orbs) == 0) and (self.player.grid_pos[0] == self.goal_pos[0] and self.player.grid_pos[1] == self.goal_pos[1]):
+            banner = "YOU WIN!"
+            warna = (0, 255, 0)
+        else:
+            banner = "GAME OVER"
+            warna = (255, 0, 0)
+        quit_text = "Press the escape button to QUIT"
+        self.draw_text(banner, self.screen, [WIDTH//2, 100],  52, warna, "arial", centered=True)
+        self.draw_text(quit_text, self.screen, [
+                       WIDTH//2, HEIGHT//1.5],  36, (190, 190, 190), "arial", centered=True)
+        pygame.display.update()
+        
     

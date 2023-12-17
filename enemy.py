@@ -9,19 +9,17 @@ class Enemy:
     def __init__(self, app, pos):
         self.app = app
         self.grid_pos = pos
-        self.starting_pos = [pos.x, pos.y]
         self.pix_pos = self.get_pix_pos()
-        self.radius = int(self.app.cell_width//2.3)
+        self.radius = int(self.app.cell_width//2)
         # self.number = number
         # self.colour = self.set_colour()
-        self.direction = vec(0, 0)
+        self.direction = vec(1, 0)
         self.target = None
-        self.speed = 1
 
     def update(self):
         self.target = self.set_target()
         if self.target != self.grid_pos:
-            self.pix_pos += self.direction * self.speed
+            self.pix_pos += self.direction
             if self.time_to_move():
                 self.move()
 
@@ -62,9 +60,9 @@ class Enemy:
         return path[1]
 
     def BFS(self, start, target):
-        grid = [[0 for x in range(28)] for x in range(30)]
+        grid = [[0 for x in range(25)] for x in range(25)]
         for cell in self.app.walls:
-            if cell.x < 28 and cell.y < 30:
+            if cell.x < 25 and cell.y < 25:
                 grid[int(cell.y)][int(cell.x)] = 1
         queue = [start]
         path = []

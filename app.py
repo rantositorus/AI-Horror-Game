@@ -35,3 +35,22 @@ class App:
                 self.playing_event()
                 self.playing_update()
                 self.playing_draw()
+                
+
+############################# START EVENTS ##################################
+
+    def start_event(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.run = False
+            if event.type == pygame.KEYDOWN:
+                self.state = 'playing'
+    
+    def start_update(self):
+        pass
+    
+    def start_draw(self):
+        self.screen.fill(BLACK)
+        start_text = START_FONT.render("Press any key to start", True, (255, 255, 255))
+        self.screen.blit(start_text, (WIDTH//2 - start_text.get_width()//2, HEIGHT//2 - start_text.get_height()//2))
+        pygame.display.update()

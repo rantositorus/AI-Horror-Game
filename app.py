@@ -20,8 +20,9 @@ class App:
         self.walls = []
         self.orbs = []
         self.enemies = []
-        self.enemy_pos = []
+        self.enemy_pos = None
         self.player_pos = None
+        self.goal_pos = None
         # self.load()
         # self.enemy = Enemy(self, vec(self.enemy_pos))
         # self.player = Player(self, vec(self.player_pos))

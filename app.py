@@ -99,11 +99,11 @@ class App:
         pass
     
     def start_draw(self):
-        self.screen.fill(BLACK)
-        self.draw_text('AI HORROR GAME', self.screen, [WIDTH//2, 400], START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
-        self.draw_text('GOAL', self.screen, [WIDTH//2, HEIGHT//2-50], START_TEXT_SIZE, (44, 167, 198), START_FONT, centered=True)
-        self.draw_text('COLLECT THE ORBS TO WIN', self.screen, [WIDTH//2, HEIGHT//2], START_TEXT_SIZE, (44, 167, 198), START_FONT, centered=True)
-        self.draw_text('PUSH ANY KEY TO START', self.screen, [WIDTH//2, HEIGHT//2+75], START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
+        self.screen.fill(WHITE)
+        self.draw_text('FIND THE ORB', self.screen, [WIDTH//2, 400], START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
+        self.draw_text('GOAL: ', self.screen, [WIDTH//2, HEIGHT//2-50], START_TEXT_SIZE, (44, 167, 198), START_FONT, centered=True)
+        self.draw_text('COLLECT THE ORBS TO WIN!', self.screen, [WIDTH//2, HEIGHT//2], START_TEXT_SIZE, (44, 167, 198), START_FONT, centered=True)
+        self.draw_text('PRESS ANY KEY TO START', self.screen, [WIDTH//2, HEIGHT//2+75], START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
         pygame.display.update()
 
         

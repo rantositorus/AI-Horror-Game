@@ -6,7 +6,7 @@ from player import *
 from enemy import *
 
 pygame.init()
-pygame.display.set_caption('AI Horror Game')
+pygame.display.set_caption('Find The Orb')
 vec = pygame.math.Vector2
 
 class App:
@@ -99,7 +99,7 @@ class App:
         pass
     
     def start_draw(self):
-        self.screen.fill(WHITE)
+        self.screen.fill(BLACK)
         self.draw_text('FIND THE ORB', self.screen, [WIDTH//2, 400], START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
         self.draw_text('GOAL: ', self.screen, [WIDTH//2, HEIGHT//2-50], START_TEXT_SIZE, (44, 167, 198), START_FONT, centered=True)
         self.draw_text('COLLECT THE ORBS TO WIN!', self.screen, [WIDTH//2, HEIGHT//2], START_TEXT_SIZE, (44, 167, 198), START_FONT, centered=True)

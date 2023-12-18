@@ -1,6 +1,7 @@
 import pygame
 import sys
 import copy
+import random
 from variables import *
 from player import *
 from enemy import *
@@ -18,6 +19,7 @@ class App:
         self.cell_width = MAZE_WIDTH//COLS
         self.cell_height = MAZE_HEIGHT//ROWS
         self.walls = []
+        self.road = []
         self.orbs = []
         self.enemy_pos = None
         self.player_pos = None
@@ -53,18 +55,38 @@ class App:
                 for xidx, char in enumerate(line):
                     if char == "X":
                         self.walls.append(vec(xidx, yidx))
-                    elif char == "O":
-                        self.orbs.append(vec(xidx, yidx))
-                    elif char == "P":
-                        self.player_pos = [xidx, yidx]
-                    elif char == "E":
-                        self.enemy_pos = [xidx, yidx]
-                    elif char == "G":
-                        self.goal_pos = [xidx, yidx]
                     elif char == "1":
-                        pygame.draw.rect(self.background, BLACK, (xidx*self.cell_width, yidx*self.cell_height,
-                                                                  self.cell_width, self.cell_height))
-    
+                        self.road.append(vec(xidx, yidx))
+
+        for coordinates in self.road:
+            print(coordinates)
+
+        print("----------------------------")
+        for coordinates in self.walls:
+            print(coordinates)    
+
+        for i in range(15):
+            # print(i)
+            random_value = random.randint(0, len(self.road) - 2)
+            # print(random_value)
+            self.orbs.append(self.road[random_value])
+            self.road.remove(self.orbs[i])
+        
+        if self.road:
+                random_value = random.randint(0, len(self.road) - 2)
+                self.player_pos = self.road[random_value]
+                self.road.remove(self.player_pos)
+
+        if self.road:
+                random_value = random.randint(0, len(self.road) - 2)
+                self.enemy_pos = self.road[random_value]
+                self.road.remove(self.enemy_pos)       
+        if self.road:
+                random_value = random.randint(0, len(self.road) - 2)
+                self.goal_pos = self.road[random_value]
+                print(self.goal_pos)
+                # self.road.remove(self.goal_pos)
+
     def draw_text(self, words, screen, pos, size, colour, font_name, centered=False):
         font = pygame.font.SysFont(font_name, size)
         text = font.render(words, False, colour)
@@ -128,16 +150,24 @@ class App:
     def playing_update(self):
         self.player.update()
         self.enemy.update()
-        if self.enemy.grid_pos == self.player.grid_pos:
+        if (self.enemy.grid_pos == self.player.grid_pos):
             self.state = 'game over'
                 
     def playing_draw(self):
         self.screen.fill(BLACK)
         self.screen.blit(self.background, (TOP_BOTTOM_BUFFER//2, TOP_BOTTOM_BUFFER//2))
         self.draw_orbs()
-        pygame.draw.rect(self.screen, (0, 255, 0), (self.goal_pos[1] * self.cell_width+39 + TOP_BOTTOM_BUFFER//2,
-                                                self.goal_pos[0] * self.cell_height-39 + TOP_BOTTOM_BUFFER//2,
-                                                self.cell_width, self.cell_height))
+        pygame.draw.rect(
+            self.screen,
+            (0, 255, 0),  # Color: Green
+            (
+                (self.goal_pos[1]) * self.cell_width + TOP_BOTTOM_BUFFER // 2,
+                (self.goal_pos[0]) * self.cell_height + TOP_BOTTOM_BUFFER // 2,
+                self.cell_width,
+                self.cell_height,
+            ),
+        )
+        pygame.draw.rect()
         self.draw_grid()
         self.draw_text('ORBS LEFT: {}'.format(self.player.orbLeft),
                        self.screen, [60, 15], 18, WHITE, START_FONT)
@@ -162,7 +192,7 @@ class App:
     
     def game_over_draw(self):
         self.screen.fill(BLACK)
-        if(len(self.orbs) == 0) and (self.player.grid_pos[0] == self.goal_pos[0] and self.player.grid_pos[1] == self.goal_pos[1]):
+        if(self.player.orbLeft == 0) and (self.player.grid_pos[0] == self.goal_pos[0] and self.player.grid_pos[1] == self.goal_pos[1]):
             banner = "YOU WIN!"
             warna = (0, 255, 0)
         else:

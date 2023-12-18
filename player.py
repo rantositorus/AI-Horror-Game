@@ -10,7 +10,7 @@ class Player:
         self.direction = vec(0, -1)
         self.listDir = None
         self.canMove = True
-        self.orbLeft = 10
+        self.orbLeft = 15
 
     def draw(self):
         pygame.draw.circle(self.app.screen, PLAYER_COLOUR, (int(self.pix_pos.x), int(self.pix_pos.y)), self.app.cell_width // 2)
@@ -53,6 +53,7 @@ class Player:
     def eat_orb(self):
         self.app.orbs.remove(self.grid_pos)
         self.orbLeft -= 1
+        print(len(self.app.orbs))
             
     def update(self):
         if self.canMove:

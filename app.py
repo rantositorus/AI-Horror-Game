@@ -55,7 +55,7 @@ class App:
                 for xidx, char in enumerate(line):
                     if char == "X":
                         self.walls.append(vec(xidx, yidx))
-                    elif char == "1":
+                    if char == "1":
                         self.road.append(vec(xidx, yidx))
 
         for coordinates in self.road:
@@ -85,7 +85,7 @@ class App:
                 random_value = random.randint(0, len(self.road) - 2)
                 self.goal_pos = self.road[random_value]
                 print(self.goal_pos)
-                # self.road.remove(self.goal_pos)
+                self.road.remove(self.goal_pos)
 
     def draw_text(self, words, screen, pos, size, colour, font_name, centered=False):
         font = pygame.font.SysFont(font_name, size)
@@ -161,13 +161,12 @@ class App:
             self.screen,
             (0, 255, 0),  # Color: Green
             (
-                (self.goal_pos[1]) * self.cell_width + TOP_BOTTOM_BUFFER // 2,
-                (self.goal_pos[0]) * self.cell_height + TOP_BOTTOM_BUFFER // 2,
+                (self.goal_pos[0]) * self.cell_width + TOP_BOTTOM_BUFFER // 2,
+                (self.goal_pos[1]) * self.cell_height + TOP_BOTTOM_BUFFER // 2,
                 self.cell_width,
                 self.cell_height,
             ),
         )
-        pygame.draw.rect()
         self.draw_grid()
         self.draw_text('ORBS LEFT: {}'.format(self.player.orbLeft),
                        self.screen, [60, 15], 18, WHITE, START_FONT)

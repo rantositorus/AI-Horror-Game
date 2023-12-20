@@ -1,21 +1,20 @@
 import pygame
-import random
 from variables import *
 
 vec = pygame.math.Vector2
 
 
 class Enemy:
+    #Initiate Enemy
     def __init__(self, app, pos):
         self.app = app
         self.grid_pos = pos
         self.pix_pos = self.get_pix_pos()
         self.radius = int(self.app.cell_width//2)
-        # self.number = number
-        # self.colour = self.set_colour()
         self.direction = vec(1, 0)
         self.target = None
 
+    #Updates the enemy's position and movement.
     def update(self):
         self.target = self.set_target()
         if self.target != self.grid_pos:
@@ -29,10 +28,11 @@ class Enemy:
         self.grid_pos[1] = (self.pix_pos[1]-TOP_BOTTOM_BUFFER +
                             self.app.cell_height//2)//self.app.cell_height+1
 
+    #draw Enemy
     def draw(self):
         pygame.draw.circle(self.app.screen, RED,
                            (int(self.pix_pos.x), int(self.pix_pos.y)), self.radius)
-
+    #get the player position
     def set_target(self):
         return self.app.player.grid_pos
 
@@ -45,20 +45,24 @@ class Enemy:
                 return True
         return False
 
+    #move function for enemy
     def move(self):
         self.direction = self.get_path_direction(self.target)
 
+    #get path direction from the path
     def get_path_direction(self, target):
         next_cell = self.find_next_cell_in_path(target)
         xdir = next_cell[0] - self.grid_pos[0]
         ydir = next_cell[1] - self.grid_pos[1]
         return vec(xdir, ydir)
 
+    #get first path
     def find_next_cell_in_path(self, target):
         path = self.BFS([int(self.grid_pos.x), int(self.grid_pos.y)], [
                         int(target[0]), int(target[1])])
         return path[1]
 
+    #BFS
     def BFS(self, start, target):
         grid = [[0 for x in range(25)] for x in range(25)]
         for cell in self.app.walls:
@@ -91,33 +95,9 @@ class Enemy:
                     shortest.insert(0, step["Current"])
         return shortest
 
-    # def get_random_direction(self):
-    #     while True:
-    #         number = random.randint(-2, 1)
-    #         if number == -2:
-    #             x_dir, y_dir = 1, 0
-    #         elif number == -1:
-    #             x_dir, y_dir = 0, 1
-    #         elif number == 0:
-    #             x_dir, y_dir = -1, 0
-    #         else:
-    #             x_dir, y_dir = 0, -1
-    #         next_pos = vec(self.grid_pos.x + x_dir, self.grid_pos.y + y_dir)
-    #         if next_pos not in self.app.walls:
-    #             break
-    #     return vec(x_dir, y_dir)
-
+    #get pixel position
     def get_pix_pos(self):
         return vec((self.grid_pos.x*self.app.cell_width)+TOP_BOTTOM_BUFFER//2+self.app.cell_width//2,
                    (self.grid_pos.y*self.app.cell_height)+TOP_BOTTOM_BUFFER//2 +
                    self.app.cell_height//2)
 
-    # def set_colour(self):
-    #     if self.number == 0:
-    #         return (43, 78, 203)
-    #     if self.number == 1:
-    #         return (197, 200, 27)
-    #     if self.number == 2:
-    #         return (189, 29, 29)
-    #     if self.number == 3:
-    #         return (215, 159, 33)

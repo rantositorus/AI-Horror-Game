@@ -3,6 +3,7 @@ from variables import *
 vec = pygame.math.Vector2
 
 class Player:
+    #initiate player
     def __init__(self, app, pos):
         self.app = app
         self.grid_pos = pos
@@ -12,13 +13,16 @@ class Player:
         self.canMove = True
         self.orbLeft = 15
 
+    #draw player
     def draw(self):
         pygame.draw.circle(self.app.screen, PLAYER_COLOUR, (int(self.pix_pos.x), int(self.pix_pos.y)), self.app.cell_width // 2)
 
+    #get pixel position for player
     def get_pix_pos(self):
         return vec((self.grid_pos[0] * self.app.cell_width) + TOP_BOTTOM_BUFFER // 2 + self.app.cell_width // 2, 
                    (self.grid_pos[1] * self.app.cell_height) + TOP_BOTTOM_BUFFER // 2 + self.app.cell_height // 2)
     
+    #function to move the player
     def move(self, direction):
         self.listDir = direction
 
@@ -33,12 +37,14 @@ class Player:
             
         return False
     
+    #checking if the player can move
     def can_move(self):
         for wall in self.app.walls:
             if vec(self.grid_pos + self.direction) == wall:
                 return False
         return True
         
+    #checking if the player position is same as the orb position
     def on_orb(self):
         if self.grid_pos in self.app.orbs:
             if int(self.pix_pos.x + TOP_BOTTOM_BUFFER // 2) % self.app.cell_width == 0:
@@ -50,11 +56,13 @@ class Player:
                     return True
         return False
     
+    #function to eat or take the orb
     def eat_orb(self):
         self.app.orbs.remove(self.grid_pos)
         self.orbLeft -= 1
         print(len(self.app.orbs))
-            
+    
+    #Updates the enemy's position and movement.
     def update(self):
         if self.canMove:
             self.pix_pos += self.direction

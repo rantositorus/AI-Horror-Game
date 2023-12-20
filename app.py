@@ -12,6 +12,7 @@ vec = pygame.math.Vector2
 
 class App:
     def __init__(self):
+        # Initialize game parameters
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
         self.runned = True
@@ -24,10 +25,9 @@ class App:
         self.enemy_pos = None
         self.player_pos = None
         self.goal_pos = None
-        self.load()
+        self.load() # Load the game map and initialize positions
         self.enemy = Enemy(self, vec(self.enemy_pos))
         self.player = Player(self, vec(self.player_pos))
-        # self.goal_grid_pos = vec(self.goal_pos)
 
     def run(self):
         while self.runned:
@@ -48,6 +48,7 @@ class App:
             self.clock.tick(FPS)
                 
     def load(self):
+        # Load the game map from 'map.txt' and initialize positions
         self.background = pygame.image.load('map.png')
         self.background = pygame.transform.scale(self.background, (MAZE_WIDTH, MAZE_HEIGHT))
         with open("map.txt", 'r') as file:
@@ -56,19 +57,10 @@ class App:
                     if char == "X":
                         self.walls.append(vec(xidx, yidx))
                     if char == "1":
-                        self.road.append(vec(xidx, yidx))
-
-        for coordinates in self.road:
-            print(coordinates)
-
-        print("----------------------------")
-        for coordinates in self.walls:
-            print(coordinates)    
+                        self.road.append(vec(xidx, yidx)) 
 
         for i in range(15):
-            # print(i)
             random_value = random.randint(0, len(self.road) - 2)
-            # print(random_value)
             self.orbs.append(self.road[random_value])
             self.road.remove(self.orbs[i])
         
@@ -84,10 +76,10 @@ class App:
         if self.road:
                 random_value = random.randint(0, len(self.road) - 2)
                 self.goal_pos = self.road[random_value]
-                print(self.goal_pos)
                 self.road.remove(self.goal_pos)
 
     def draw_text(self, words, screen, pos, size, colour, font_name, centered=False):
+        # Draw text on the game screen
         font = pygame.font.SysFont(font_name, size)
         text = font.render(words, False, colour)
         text_size = text.get_size()
@@ -97,12 +89,14 @@ class App:
         screen.blit(text, pos)
         
     def draw_grid(self):
+        # Draw grid lines on the game background
         for x in range(WIDTH//self.cell_width):
             pygame.draw.line(self.background, GREY, (x*self.cell_width, 0), (x*self.cell_width, HEIGHT))
         for x in range(HEIGHT//self.cell_height):
             pygame.draw.line(self.background, GREY, (0, x*self.cell_height), (WIDTH, x*self.cell_height))
             
     def draw_orbs(self):
+        # Draw orbs on the game screen
         for orb in self.orbs:
             pygame.draw.circle(self.screen, (124, 123, 7),
                                (int(orb.x*self.cell_width)+self.cell_width//2+TOP_BOTTOM_BUFFER//2,
